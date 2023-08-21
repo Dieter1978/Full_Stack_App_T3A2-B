@@ -71,7 +71,7 @@ const students =[
 ]
 
 await StudentModel.deleteMany()
-const insertedStudents = await StudentModel.insertMany(Students)
+const insertedStudents = await StudentModel.insertMany(students)
 console.log('inserted students: ', insertedStudents)
 
 dbClose()

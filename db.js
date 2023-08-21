@@ -86,4 +86,4 @@ const studentSchema = new mongoose.Schema({
 
 const StudentModel = mongoose.model('Student', studentSchema)
 
-export { StudentModel, UserModel, YearModel, ClassModel }
+export { StudentModel, UserModel, YearModel, ClassModel, dbClose }
