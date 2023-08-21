@@ -52,6 +52,7 @@ const ClassModel = mongoose.model('Class', classSchema)
 // YEAR SCHEMA
 const yearSchema = new mongoose.Schema({
     year : {type : String, required: [true,'Please add name']},
+    class: [classSchema],
 
 })
 
@@ -84,3 +85,5 @@ const studentSchema = new mongoose.Schema({
 })
 
 const StudentModel = mongoose.model('Student', studentSchema)
+
+export { StudentModel, UserModel, YearModel, ClassModel }
