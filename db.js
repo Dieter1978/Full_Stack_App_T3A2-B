@@ -42,7 +42,45 @@ const UserModel = mongoose.model('User', userSchema)
 
 
 // CLASS SCHEMA
+const classSchema = new mongoose.Schema({
+    name : {type : String, required: [true,'Please add name']},
+
+})
+
+const ClassModel = mongoose.model('Class', classSchema)
 
 // YEAR SCHEMA
+const yearSchema = new mongoose.Schema({
+    year : {type : String, required: [true,'Please add name']},
+
+})
+
+const YearModel = mongoose.model('Year', yearSchema)
 
 // STUDENT SCHEMA
+
+const studentSchema = new mongoose.Schema({
+    firstname : {type: String, required:true},
+    lastname: {type: String, required:true},
+    year: {type: mongoose.ObjectId, ref: 'year'},
+    class: {type: mongoose.ObjectId, ref: 'class'},
+    email : {
+        type: String,
+        required: [true, 'Please add an email'],
+        unique: true,
+        match: [
+          /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+          'Please add a valid email'
+        ]
+    },
+    photo : String,
+    contactdetails: String,
+    questionone : String,
+    questiontwo : String,
+    questionthree : String,
+    questionfour : String,
+
+
+})
+
+const StudentModel = mongoose.model('Student', studentSchema)
