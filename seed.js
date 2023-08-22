@@ -1,23 +1,6 @@
 import {StudentModel, UserModel, YearModel, ClassModel, dbClose} from './db.js'
 
-const users = [
-    {
-      name : 'John',
-      email : 'john.smith@gmail.com',
-      role : 'admin',
-      password : 'password',
-    },
-    {
-      name : 'Bill',
-      email : 'bill.smith@gmail.com',
-      role : 'user',
-      password : 'password',
-    }
-]
 
-await UserModel.deleteMany()
-const insertedUsers = await UserModel.insertMany(users)
-console.log('inserted users : ' + insertedUsers)
 
 const classes = [
     {name : 'Geecko'},
@@ -73,5 +56,27 @@ const students =[
 await StudentModel.deleteMany()
 const insertedStudents = await StudentModel.insertMany(students)
 console.log('inserted students: ', insertedStudents)
+
+
+
+const users = [
+    {
+      name : 'John',
+      email : 'john.smith@gmail.com',
+      role : 'admin',
+      password : 'password',
+    },
+    {
+      name : 'Bill',
+      email : 'bill.smith@gmail.com',
+      role : 'user',
+      password : 'password',
+      student : insertedStudents[0]
+    }
+]
+
+await UserModel.deleteMany()
+const insertedUsers = await UserModel.insertMany(users)
+console.log('inserted users : ' + insertedUsers)
 
 dbClose()
