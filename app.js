@@ -11,6 +11,6 @@ app.use(express.json())
 
 app.get('/', (req, res) => res.send({info: 'Start Pagerequest'}))
 
-app.use('/users', authRoutes)
+app.use('/', authRoutes)
 
 export default app
