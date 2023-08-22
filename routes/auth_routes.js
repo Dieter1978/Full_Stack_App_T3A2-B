@@ -5,9 +5,14 @@ const router = Router()
 
 // Register POST Route
 router.post('/signup', async (req, res) => {
-    const { name, email, role, password } = req.body
-    const newUser = await UserModel.create({ name, email, role, password })
-    res.status(201).send(newUser)
+    try{
+        const { name, email, role, password } = req.body
+        await UserModel.create({ name, email, role, password })
+        res.status(201).send(`Welcome ${name}!`)
+    }
+    catch (err) {
+        res.status(500).send({ error: err.message })
+    }
 })
 
 // Login POST Route

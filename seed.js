@@ -20,10 +20,10 @@ const insertedUsers = await UserModel.insertMany(users)
 console.log('inserted users : ' + insertedUsers)
 
 const classes = [
-    {name : 'Geecko'},
+    {name : 'Gecko'},
     {name : 'Salamander'},
     {name : 'Kangaroo'},
-    {name : 'possum'}
+    {name : 'Possum'}
 ]
 
 await ClassModel.deleteMany()
