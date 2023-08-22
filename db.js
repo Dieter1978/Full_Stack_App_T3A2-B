@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
 const UserModel = mongoose.model('User', userSchema)
 
 // Encrypt password using bcrypt
-UserSchema.pre('save', async function(next) {
+userSchema.pre('save', async function(next) {
     if (!this.isModified('password')) {
       next();
     }
@@ -51,14 +51,14 @@ UserSchema.pre('save', async function(next) {
   });
   
   // Sign JWT and return
-  UserSchema.methods.getSignedJwtToken = function() {
+  userSchema.methods.getSignedJwtToken = function() {
     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE
     });
   };
   
   // Match user entered password to hashed password in database
-  UserSchema.methods.matchPassword = async function(enteredPassword) {
+  userSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
   };
   

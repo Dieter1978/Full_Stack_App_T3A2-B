@@ -5,10 +5,22 @@ const router = Router()
 
 // Register POST Route
 router.post('/signup', async (req, res) => {
-    const insertedEntry = await UserModel.create({ content: req.body.content })
-    res.status(201).send(insertedEntry)
+    const { name, email, role, password } = req.body
+    const newUser = await UserModel.create({ name, email, role, password })
+    res.status(201).send(newUser)
 })
 
 // Login POST Route
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body
+    
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Username and password are required.' });
+    }
+
+    const user = await UserModel.findOne({ email }).select('+password')
+
+
+})
 
 export default router
