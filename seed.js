@@ -3,10 +3,10 @@ import {StudentModel, UserModel, YearModel, ClassModel, dbClose} from './db.js'
 
 
 const classes = [
-    {name : 'Geecko'},
+    {name : 'Gecko'},
     {name : 'Salamander'},
     {name : 'Kangaroo'},
-    {name : 'possum'}
+    {name : 'Possum'}
 ]
 
 await ClassModel.deleteMany()
