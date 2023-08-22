@@ -1,5 +1,8 @@
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+
 dotenv.config()
 
 
