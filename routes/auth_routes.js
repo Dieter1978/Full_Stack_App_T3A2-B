@@ -7,6 +7,7 @@ const router = Router()
 router.post('/signup', async (req, res) => {
     try{
         const { name, email, role, password } = req.body
+        
         await UserModel.create({ name, email, role, password })
         res.status(201).send(`Welcome ${name}!`)
     }

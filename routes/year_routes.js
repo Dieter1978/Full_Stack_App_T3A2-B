@@ -55,7 +55,7 @@ router.put('/:id', async (req,res) => {
 
         if(req.body.content)
         {
-            updateYear.content = req.body.content
+            updateYear.year = req.body.year
         }
 
         const aYear = await YearModel.findByIdAndUpdate(req.params.id, updateYear, {new:true})
