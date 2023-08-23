@@ -91,8 +91,8 @@ const YearModel = mongoose.model('Year', yearSchema)
 const studentSchema = new mongoose.Schema({
     firstname : {type: String, required:true},
     lastname: {type: String, required:true},
-    year: {type: mongoose.ObjectId, ref: 'year'},
-    class: {type: mongoose.ObjectId, ref: 'class'},
+    year: {type: mongoose.ObjectId, ref: 'Year'},
+    class: {type: mongoose.ObjectId, ref: 'Class'},
     email : {
         type: String,
         required: [true, 'Please add an email'],
