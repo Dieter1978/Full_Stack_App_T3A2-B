@@ -11,6 +11,7 @@ router.post('/signup', async (req, res) => {
         let password = req.body.password
         const salt = await bcrypt.genSalt(10)
         password = await bcrypt.hash(password, salt)
+
         await UserModel.create({ name, email, role, password })
         res.status(201).send(`Welcome ${name}!`)
     }

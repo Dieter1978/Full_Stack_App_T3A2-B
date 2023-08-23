@@ -1,4 +1,5 @@
 import {StudentModel, UserModel, YearModel, ClassModel, dbClose} from './db.js'
+import bcrypt from 'bcryptjs'
 
 
 
@@ -57,20 +58,22 @@ await StudentModel.deleteMany()
 const insertedStudents = await StudentModel.insertMany(students)
 console.log('inserted students: ', insertedStudents)
 
-
+const salt = await bcrypt.genSalt(10);
+const passwordOne = await bcrypt.hash('testing', salt);
+const passwordTwo = await bcrypt.hash('anothertesting', salt);
 
 const users = [
     {
       name : 'John',
       email : 'john.smith@gmail.com',
       role : 'admin',
-      password : 'password',
+      password : passwordOne,
     },
     {
       name : 'Bill',
       email : 'bill.smith@gmail.com',
       role : 'user',
-      password : 'password',
+      password : passwordTwo,
       student : insertedStudents[0]
     }
 ]
