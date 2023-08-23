@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import {ClassModel} from '../db.js'
+import {ClassModel, YearModel} from '../db.js'
 
 const router = Router()
 
@@ -36,13 +36,13 @@ router.post('/:year_id', async(req,res) => {
     try
     {
         // create the new class instance
-        const newClass = await ClassModel.create({class : req.body.class})
+        const newClass = await ClassModel.create({name : req.body.name})
         // add the class to the year object
         const updateYear = await YearModel.findById(req.params.year_id)
         
         if(updateYear)
         {
-            updateYear.class.append(newClass)
+            updateYear.class.push(newClass)
 
             const aYear = await YearModel.findByIdAndUpdate(req.params.year_id, updateYear, {new:true})
             
@@ -78,11 +78,8 @@ router.put('/:id', async (req, res)=>{
 
         if(req.body.content)
         {
-            updateClass.content = req.body.content
+            const aClass = await ClassModel.findByIdAndUpdate(req.params.id, {name : req.body.name}, {new:true})
         }
-
-        const aClass = await ClassModel.findByIdAndUpdate(req.params.id, updateClass, {new:true})
-
         if(aClass)
         {
             res.send(aClass)
@@ -104,7 +101,7 @@ router.put('/:id', async (req, res)=>{
 router.delete('/:id', async (req,res) => {
     try
     {
-        const aClass = await ClassModel.findByIdandDelete(req.params.id)
+        const aClass = await ClassModel.findByIdAndDelete(req.params.id)
       
         if (aClass){
             res.sendStatus(200)

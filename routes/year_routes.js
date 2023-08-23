@@ -51,14 +51,12 @@ router.get('/:id', async (req, res) => {
 // Update a Year PUT
 router.put('/:id', async (req,res) => {
     try {
-        const updateYear = {}
+        const updateYear =  await YearModel.findById(req.params.id)
 
-        if(req.body.content)
+        if(req.body.year)
         {
-            updateYear.year = req.body.year
+            const aYear = await YearModel.findByIdAndUpdate(req.params.id, {year : req.body.year}, {new:true})
         }
-
-        const aYear = await YearModel.findByIdAndUpdate(req.params.id, updateYear, {new:true})
 
         if(aYear)
         {
@@ -78,7 +76,7 @@ router.put('/:id', async (req,res) => {
 router.delete('/:id', async (req,res) => {
     try
     {
-        const year = await YearModel.findByIdandDelete(req.params.id)
+        const year = await YearModel.findByIdAndDelete(req.params.id)
       
         if (year){
             res.sendStatus(200)
