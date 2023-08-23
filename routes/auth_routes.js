@@ -1,6 +1,5 @@
 import { Router } from 'express'
 import { UserModel } from '../db.js'
-import bcrypt from 'bcryptjs'
 
 const router = Router()
 
@@ -32,7 +31,7 @@ router.post('/login', async (req, res) => {
                 res.status(200).send('Login successful!')
             } else {
                 res.status(400).send('Invalid credentials.')
-            }
+            }   
         } else {
             res.status(404).send({ error: 'User not found.' })
         }
