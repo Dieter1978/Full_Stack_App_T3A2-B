@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { UserModel } from '../db.js'
+import bcrypt from 'bcryptjs'
 
 const router = Router()
 
@@ -20,12 +21,25 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body
     
     if (!email || !password) {
-        return res.status(400).json({ error: 'Username and password are required.' });
+        return res.status(400).json({ error: 'Email and password are required.' });
     }
 
-    const user = await UserModel.findOne({ email }).select('+password')
-
-
+    try {
+        const user = await UserModel.findOne({ email }).select('+password')
+        if (user) {
+            const isPasswordMatch = await user.matchPassword(password) // TODO
+            if (isPasswordMatch) {
+                res.status(200).send('Login successful!')
+            } else {
+                res.status(400).send('Invalid credentials.')
+            }
+        } else {
+            res.status(404).send({ error: 'User not found.' })
+        }
+    }
+    catch (err) {
+        res.status(500).send({ error: err.message })
+    }
 })
 
 export default router
