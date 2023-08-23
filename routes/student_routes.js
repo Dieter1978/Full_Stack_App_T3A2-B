@@ -14,7 +14,26 @@ router.get('/', async (req, res) => {
     } catch (error) {
       res.status(500).send({ error: error.message })
     }
-});
+})
+
+// Get one student
+router.get('/:id', async (req, res) => {
+    try {
+        const studentId = req.params.id;
+        const student = await StudentModel.findById(studentId)
+          .populate({ path: 'year', select: ' -_id year' })
+          .populate({ path: 'class', select: '-_id name' })
+    
+        res.send(student);
+
+        if (!student) {
+            return res.status(404).send('Student not found.')
+        }
+
+      } catch (error) {
+        res.status(500).send({ error: error.message })
+      }
+})
 
 // Create a student POST
 // admin only

@@ -26,7 +26,7 @@ router.post('/login', async (req, res) => {
     try {
         const user = await UserModel.findOne({ email }).select('+password')
         if (user) {
-            const isPasswordMatch = await user.matchPassword(password) // TODO
+            const isPasswordMatch = await user.matchPassword(password) // "error": "user.matchPassword is not a function"
             if (isPasswordMatch) {
                 res.status(200).send('Login successful!')
             } else {
