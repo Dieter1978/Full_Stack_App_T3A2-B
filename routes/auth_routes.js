@@ -1,12 +1,16 @@
 import { Router } from 'express'
 import { UserModel } from '../db.js'
+import bcrypt from 'bcryptjs'
 
 const router = Router()
 
 // Register POST Route
 router.post('/signup', async (req, res) => {
     try{
-        const { name, email, role, password } = req.body
+        const { name, email, role } = req.body
+        let password = req.body.password
+        const salt = await bcrypt.genSalt(10)
+        password = await bcrypt.hash(password, salt)
         await UserModel.create({ name, email, role, password })
         res.status(201).send(`Welcome ${name}!`)
     }
@@ -20,13 +24,13 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body
     
     if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password are required.' });
+        return res.status(400).json({ error: 'Email and password are required.' })
     }
 
     try {
         const user = await UserModel.findOne({ email }).select('+password')
         if (user) {
-            const isPasswordMatch = await user.matchPassword(password) // "error": "user.matchPassword is not a function"
+            const isPasswordMatch = await bcrypt.compare(password, user.password)
             if (isPasswordMatch) {
                 res.status(200).send('Login successful!')
             } else {

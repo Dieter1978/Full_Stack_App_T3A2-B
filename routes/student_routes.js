@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         .populate({ path: 'year', select: ' -_id year' })
         .populate({ path: 'class', select: '-_id name' })
   
-      res.send(students);
+      res.send(students)
     } catch (error) {
       res.status(500).send({ error: error.message })
     }
@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
           .populate({ path: 'year', select: ' -_id year' })
           .populate({ path: 'class', select: '-_id name' })
     
-        res.send(student);
+        res.send(student)
 
         if (!student) {
             return res.status(404).send('Student not found.')
@@ -37,6 +37,7 @@ router.get('/:id', async (req, res) => {
 
 // Create a student POST
 // admin only
+
 
 // Update a student UPDATE
 // admin and student
