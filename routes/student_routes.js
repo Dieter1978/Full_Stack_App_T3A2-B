@@ -35,17 +35,17 @@ router.get('/:id', async (req, res) => {
 })
 
 // Create a student POST
-// admin only
+// TODO: admin only
 router.post('/', async (req, res) => {
   try {
-    const { firstname, lastname, email, year, className, photo } = req.body;
+    const { firstname, lastname, email, year, className, photo } = req.body
 
     const selectedYear = await YearModel.findOne({ year })
     if (!selectedYear) {
       return res.status(404).json({ error: 'Year not found.' })
     }
 
-    const selectedClass = await ClassModel.findOne({ name: className })
+    const selectedClass = await ClassModel.findOne({ name: className }) // TODO: only select from available classes in chosen year
     if (!selectedClass) {
       return res.status(404).json({ error: 'Class not found.' })
     }
@@ -63,18 +63,66 @@ router.post('/', async (req, res) => {
 })
 
 // Update a student UPDATE
-// admin and student
-router.post('/', async (req, res) => {
+// TODO: admin and student
+router.put('/:id', async (req, res) => {
   try {
+    const {
+      firstname,
+      lastname,
+      email,
+      year,
+      className,
+      photo,
+      contactdetails,
+      questionone,
+      questiontwo,
+      questionthree,
+      questionfour
+    } = req.body
 
+    const selectedYear = await YearModel.findOne({ year })
+    if (!selectedYear) {
+      return res.status(404).json({ error: 'Year not found.' })
+    }
 
+    const selectedClass = await ClassModel.findOne({ name: className }) // TODO: only select from available classes in chosen year
+    if (!selectedClass) {
+      return res.status(404).json({ error: 'Class not found.' })
+    }
+
+    const updatedStudent = await StudentModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        firstname,
+        lastname,
+        email,
+        year: selectedYear._id,
+        class: selectedClass._id,
+        photo,
+        contactdetails,
+        questionone,
+        questiontwo,
+        questionthree,
+        questionfour
+      },
+      { new: true }
+    );
+
+    if (!updatedStudent) {
+      return res.status(404).json({ error: 'Student not found.' })
+    }
+
+    await updatedStudent.populate({ path: 'year', select: ' -_id year' })
+    await updatedStudent.populate({ path: 'class', select: '-_id name' })
+
+    res.status(200).json(updatedStudent)
     } catch (error) {
       res.status(500).send({ error: error.message })
     }
   })
 
 // Delete a student DELETE
-// admin only
+// TODO: admin only
 router.delete('/:id', async (req,res) => {
   try {
       const student = await StudentModel.findByIdAndDelete(req.params.id)
