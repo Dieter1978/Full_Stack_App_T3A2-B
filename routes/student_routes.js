@@ -45,9 +45,9 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ error: 'Year not found.' })
     }
 
-    const selectedClass = await ClassModel.findOne({ name: className }) // TODO: only select from available classes in chosen year
+    const selectedClass = selectedYear.class.find(cls => cls.name === className);
     if (!selectedClass) {
-      return res.status(404).json({ error: 'Class not found.' })
+      return res.status(404).json({ error: 'Class not found in the selected year.' });
     }
 
     const newStudent = await StudentModel.create({ firstname, lastname, email, year: selectedYear._id, class: selectedClass._id, photo })
@@ -85,9 +85,9 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Year not found.' })
     }
 
-    const selectedClass = await ClassModel.findOne({ name: className }) // TODO: only select from available classes in chosen year
+    const selectedClass = selectedYear.class.find(cls => cls.name === className);
     if (!selectedClass) {
-      return res.status(404).json({ error: 'Class not found.' })
+      return res.status(404).json({ error: 'Class not found in the selected year.' });
     }
 
     const updatedStudent = await StudentModel.findByIdAndUpdate(
