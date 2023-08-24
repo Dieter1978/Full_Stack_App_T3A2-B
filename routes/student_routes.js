@@ -51,6 +51,9 @@ router.post('/', async (req, res) => {
     }
 
     const newStudent = await StudentModel.create({ firstname, lastname, email, year: selectedYear._id, class: selectedClass._id, photo })
+
+    await newStudent.populate({ path: 'year', select: ' -_id year' })
+    await newStudent.populate({ path: 'class', select: '-_id name' })
     
     res.status(201).send(newStudent)
 
