@@ -1,9 +1,9 @@
 import { Router } from 'express'
-import { StudentModel } from '../db.js'
+import { StudentModel, YearModel, ClassModel } from '../db.js'
 
 const router = Router()
 
-// GET students and display
+// Get all students
 router.get('/', async (req, res) => {
     try {
       const students = await StudentModel.find()
@@ -36,19 +36,39 @@ router.get('/:id', async (req, res) => {
 
 // Create a student POST
 // admin only
-// router.post('/', async (req, res) => {
-//   try {
+router.post('/', async (req, res) => {
+  try {
+    const { firstname, lastname, email, year, className, photo } = req.body;
 
-//     // const { firstname, lastname, email, year, class, photo } = req.body
-//     // const newStudent = await StudentModel.create({ firstname, lastname, email, year: year, class, photo })
-//     res.status(201)
-//   } catch (error) {
-//     res.status(500).send({ error: error.message })
-//   }
-// })
+    const selectedYear = await YearModel.findOne({ year })
+    if (!selectedYear) {
+      return res.status(404).json({ error: 'Year not found.' })
+    }
+
+    const selectedClass = await ClassModel.findOne({ name: className })
+    if (!selectedClass) {
+      return res.status(404).json({ error: 'Class not found.' })
+    }
+
+    const newStudent = await StudentModel.create({ firstname, lastname, email, year: selectedYear._id, class: selectedClass._id, photo })
+    
+    res.status(201).send(newStudent)
+
+  } catch (error) {
+    res.status(500).send({ error: error.message })
+  }
+})
 
 // Update a student UPDATE
 // admin and student
+router.post('/', async (req, res) => {
+  try {
+
+
+    } catch (error) {
+      res.status(500).send({ error: error.message })
+    }
+  })
 
 // Delete a student DELETE
 // admin only
