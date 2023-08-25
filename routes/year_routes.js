@@ -5,6 +5,7 @@ const router = Router()
 
 // GET Years to display
 router.get('/', async(req,res) => res.send(await YearModel.find().populate({path : 'class', select: '-_id'})))
+
 // Create a Year POST
 router.post('/', async(req,res) => {
     try
@@ -27,8 +28,8 @@ router.post('/', async(req,res) => {
         res.status(500).send({error:err.message})
     }
 })
-// Display a single Year
 
+// Display a single Year
 router.get('/:id', async (req, res) => {
     try {
         const aYear = await YearModel.findById(req.params.id).populate({path: 'class',select : '-_id'})
