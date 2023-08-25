@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import {YearModel} from '../db.js'
+import {YearModel,authorizeAdmin, authenticateToken} from '../db.js'
 
 const router = Router()
 
@@ -7,7 +7,7 @@ const router = Router()
 router.get('/', async(req,res) => res.send(await YearModel.find().populate({path : 'class', select: '-_id'})))
 
 // Create a Year POST
-router.post('/', async(req,res) => {
+router.post('/', authorizeAdmin, authenticateToken, async(req,res) => {
     try
     {
         const newYear = await YearModel.create({year : req.body.year})
@@ -50,7 +50,7 @@ router.get('/:id', async (req, res) => {
 
 })
 // Update a Year PUT
-router.put('/:id', async (req,res) => {
+router.put('/:id',authorizeAdmin, authenticateToken, async (req,res) => {
     try {
         const updateYear =  await YearModel.findById(req.params.id)
 
@@ -74,7 +74,7 @@ router.put('/:id', async (req,res) => {
 
 })
 // Delete a Year DELETE
-router.delete('/:id', async (req,res) => {
+router.delete('/:id',authorizeAdmin, authenticateToken, async (req,res) => {
     try
     {
         const year = await YearModel.findByIdAndDelete(req.params.id)

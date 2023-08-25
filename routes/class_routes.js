@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import {ClassModel, YearModel} from '../db.js'
+import {ClassModel, YearModel, authorizeAdmin, authenticateToken} from '../db.js'
 
 const router = Router()
 
@@ -32,7 +32,7 @@ router.get('/:year_id', async(req,res) => {
     
 
 // Create a Class POST
-router.post('/:year_id', async(req,res) => {
+router.post('/:year_id',authorizeAdmin, authenticateToken, async(req,res) => {
     try
     {
         // create the new class instance
@@ -72,7 +72,7 @@ router.post('/:year_id', async(req,res) => {
 
 
 // Update a Class PUT
-router.put('/:id', async (req, res)=>{
+router.put('/:id',authorizeAdmin, authenticateToken, async (req, res)=>{
     try {
         const updateClass = {}
 
@@ -98,7 +98,7 @@ router.put('/:id', async (req, res)=>{
 
 // Delete a Class DELETE
 
-router.delete('/:id', async (req,res) => {
+router.delete('/:id',authorizeAdmin, authenticateToken, async (req,res) => {
     try
     {
         const aClass = await ClassModel.findByIdAndDelete(req.params.id)
