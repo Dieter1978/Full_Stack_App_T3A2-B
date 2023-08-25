@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { UserModel } from '../db.js'
+import { UserModel, StudentModel } from '../db.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
@@ -8,12 +8,24 @@ const router = Router()
 // Register POST Route
 router.post('/signup', async (req, res) => {
 	try{
-		const { name, email, role } = req.body
+		const { name, email, role, studentId } = req.body
 		let password = req.body.password
 		const salt = await bcrypt.genSalt(10)
 		password = await bcrypt.hash(password, salt)
 
-		const newUser = await UserModel.create({ name, email, role, password })
+		// Find the student by ID
+		const student = await StudentModel.findById(studentId);
+
+		if (!student) {
+			return res.status(400).json({ error: 'Invalid invitation code.' })
+		}
+
+		// Check if the provided email matches the student's email
+		if (email !== student.email) {
+			return res.status(400).json({ error: 'Email does not match.' })
+		}
+
+		const newUser = await UserModel.create({ name, email, role, password, student: student._id })
     
 		// Generate a JWT token for the new user
     	const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
@@ -42,8 +54,8 @@ router.post('/login', async (req, res) => {
 					if (isPasswordMatch) {
 						const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
 							expiresIn: process.env.JWT_EXPIRE
-						  });
-						  res.status(200).json({ token, message: 'Login successful!' });
+						  })
+						  res.status(200).json({ token, message: 'Login successful!' })
 					} else {
 							res.status(400).send('Invalid credentials.')
 					}   
