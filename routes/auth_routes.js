@@ -1,19 +1,26 @@
 import { Router } from 'express'
 import { UserModel } from '../db.js'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 const router = Router()
 
 // Register POST Route
 router.post('/signup', async (req, res) => {
 	try{
-			const { name, email, role } = req.body
-			let password = req.body.password
-			const salt = await bcrypt.genSalt(10)
-			password = await bcrypt.hash(password, salt)
+		const { name, email, role } = req.body
+		let password = req.body.password
+		const salt = await bcrypt.genSalt(10)
+		password = await bcrypt.hash(password, salt)
 
-			await UserModel.create({ name, email, role, password })
-			res.status(201).send(`Welcome ${name}!`)
+		const newUser = await UserModel.create({ name, email, role, password })
+    
+		// Generate a JWT token for the new user
+    	const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+		expiresIn: process.env.JWT_EXPIRE,
+	  })
+  
+	  res.status(201).json({ token, message: `Welcome ${name}!` })
 	}
 	catch (err) {
 			res.status(500).send({ error: err.message })
@@ -33,7 +40,10 @@ router.post('/login', async (req, res) => {
 			if (user) {
 					const isPasswordMatch = bcrypt.compare(password, user.password)
 					if (isPasswordMatch) {
-							res.status(200).send('Login successful!')
+						const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+							expiresIn: process.env.JWT_EXPIRE
+						  });
+						  res.status(200).json({ token, message: 'Login successful!' });
 					} else {
 							res.status(400).send('Invalid credentials.')
 					}   

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { StudentModel, YearModel, ClassModel } from '../db.js'
+import { StudentModel, YearModel, authorizeAdmin, authenticateToken } from '../db.js'
 
 const router = Router()
 
@@ -35,8 +35,8 @@ router.get('/:id', async (req, res) => {
 })
 
 // Create a student POST
-// TODO: admin only
-router.post('/', async (req, res) => {
+// Admin only
+router.post('/', authorizeAdmin, authenticateToken, async (req, res) => {
   try {
     const { firstname, lastname, email, year, className, photo } = req.body
 
@@ -63,8 +63,8 @@ router.post('/', async (req, res) => {
 })
 
 // Update a student UPDATE
-// TODO: admin and student
-router.put('/:id', async (req, res) => {
+// Admin and student
+router.put('/:id', authenticateToken, async (req, res) => {
   try {
     const {
       firstname,
@@ -122,8 +122,8 @@ router.put('/:id', async (req, res) => {
   })
 
 // Delete a student DELETE
-// TODO: admin only
-router.delete('/:id', async (req,res) => {
+// Admin only
+router.delete('/:id', authorizeAdmin, authenticateToken, async (req,res) => {
   try {
       const student = await StudentModel.findByIdAndDelete(req.params.id)
     
