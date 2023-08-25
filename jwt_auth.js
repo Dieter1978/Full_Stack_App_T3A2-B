@@ -20,7 +20,7 @@ const authenticateToken = async (req, res, next) => {
 
     // Skip the student linkage check for admin users
     if (user.role === 'admin') {
-      req.user = user;
+      req.user = user
       next()
     } else {
       // Check if the user is linked to a student
@@ -36,7 +36,7 @@ const authenticateToken = async (req, res, next) => {
 
       req.user = user
       req.student = student
-      next();
+      next()
     }
   } catch (err) {
     return res.status(403).json({ error: 'Invalid token.' })
@@ -45,37 +45,37 @@ const authenticateToken = async (req, res, next) => {
   
 // Authorization middleware for admin
 const authorizeAdmin = (req, res, next) => {
-if (req.user && req.user.role === 'admin') {
+  if (req.user && req.user.role === 'admin') {
     next()
-} else {
+  } else {
     return res.status(403).json({ error: 'Unauthorized.' })
+  }
 }
-};
 
 // Authorization middleware for admin or linked student
 const authorizeAdminOrLinkedStudent = (req, res, next) => {
-if (req.user.role === 'admin' || req.user.student.equals(req.student._id)) {
+  if (req.user.role === 'admin' || req.user.student.equals(req.student._id)) {
     next()
-} else {
+  } else {
     return res.status(403).json({ error: 'Unauthorized.' })
+  }
 }
-};
 
-// Authorization middleware for any valid JWT
+// Authorization middleware for any valid user
 const authorizeJWT = (req, res, next) => {
-const authHeader = req.headers['authorization']
-const token = authHeader && authHeader.split(' ')[1]
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
 
-if (!token) {
-  return res.status(401).json({ error: 'Authorization token missing.' })
-}
+  if (!token) {
+    return res.status(401).json({ error: 'Authorization token missing.' })
+  }
 
-try {
-    jwt.verify(token, process.env.JWT_SECRET);
+  try {
+    jwt.verify(token, process.env.JWT_SECRET)
     next()
-} catch (err) {
+  } catch (err) {
     return res.status(403).json({ error: 'Invalid token.' })
+  }
 }
-};
 
 export { authorizeAdmin, authenticateToken, authorizeAdminOrLinkedStudent, authorizeJWT }
