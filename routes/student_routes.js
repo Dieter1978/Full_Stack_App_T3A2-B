@@ -1,10 +1,12 @@
 import { Router } from 'express'
-import { StudentModel, YearModel, authorizeAdmin, authenticateToken } from '../db.js'
+import { StudentModel, YearModel } from '../db.js'
+import { authenticateToken, authorizeAdmin, authorizeAdminOrLinkedStudent, authorizeJWT } from '../jwt_auth.js'
 
 const router = Router()
 
 // Get all students
-router.get('/', async (req, res) => {
+// Admin and valid user
+router.get('/', authorizeJWT, async (req, res) => {
     try {
       const students = await StudentModel.find()
         .populate({ path: 'year', select: ' -_id year' })
@@ -17,7 +19,8 @@ router.get('/', async (req, res) => {
 })
 
 // Get one student
-router.get('/:id', async (req, res) => {
+// Admin and valid user
+router.get('/:id', authorizeJWT, async (req, res) => {
     try {
         const student = await StudentModel.findById(req.params.id)
           .populate({ path: 'year', select: ' -_id year' })
@@ -36,7 +39,7 @@ router.get('/:id', async (req, res) => {
 
 // Create a student POST
 // Admin only
-router.post('/', authorizeAdmin, authenticateToken, async (req, res) => {
+router.post('/', authenticateToken, authorizeAdmin, async (req, res) => {
   try {
     const { firstname, lastname, email, year, className, photo } = req.body
 
@@ -45,9 +48,9 @@ router.post('/', authorizeAdmin, authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'Year not found.' })
     }
 
-    const selectedClass = selectedYear.class.find(cls => cls.name === className);
+    const selectedClass = selectedYear.class.find(cls => cls.name === className)
     if (!selectedClass) {
-      return res.status(404).json({ error: 'Class not found in the selected year.' });
+      return res.status(404).json({ error: 'Class not found in the selected year.' })
     }
 
     const newStudent = await StudentModel.create({ firstname, lastname, email, year: selectedYear._id, class: selectedClass._id, photo })
@@ -64,7 +67,7 @@ router.post('/', authorizeAdmin, authenticateToken, async (req, res) => {
 
 // Update a student UPDATE
 // Admin and student
-router.put('/:id', authenticateToken, async (req, res) => {
+router.put('/:id', authenticateToken, authorizeAdminOrLinkedStudent, async (req, res) => {
   try {
     const {
       firstname,
@@ -85,9 +88,9 @@ router.put('/:id', authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'Year not found.' })
     }
 
-    const selectedClass = selectedYear.class.find(cls => cls.name === className);
+    const selectedClass = selectedYear.class.find(cls => cls.name === className)
     if (!selectedClass) {
-      return res.status(404).json({ error: 'Class not found in the selected year.' });
+      return res.status(404).json({ error: 'Class not found in the selected year.' })
     }
 
     const updatedStudent = await StudentModel.findByIdAndUpdate(
@@ -123,7 +126,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
 
 // Delete a student DELETE
 // Admin only
-router.delete('/:id', authorizeAdmin, authenticateToken, async (req,res) => {
+router.delete('/:id', authenticateToken, authorizeAdmin, async (req,res) => {
   try {
       const student = await StudentModel.findByIdAndDelete(req.params.id)
     
