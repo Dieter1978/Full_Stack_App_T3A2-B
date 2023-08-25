@@ -54,20 +54,38 @@ userSchema.pre('save', async function(next) {
     this.password = await bcrypt.hash(this.password, salt);
   });
   
-  // Sign JWT and return
+// Sign JWT and return
   userSchema.methods.getSignedJwtToken = function() {
     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE
     });
   };
   
-  // Match user entered password to hashed password in database
-  // userSchema.methods.matchPassword = async function(enteredPassword) {
-  //   return await bcrypt.compare(enteredPassword, this.password);
-  // };
-  
+// Authentication middleware
+const authenticateToken = (req, res, next) => {
+  const token = req.headers['authorization'];
 
+  if (!token) {
+    return res.status(401).json({ error: 'Authorization token missing.' });
+  }
 
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Invalid token.' });
+    }
+    req.user = user;
+    next();
+  });
+};
+
+// Authorization middleware for admin
+const authorizeAdmin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    return res.status(403).json({ error: 'Unauthorized.' });
+  }
+};
 
 // CLASS SCHEMA
 const classSchema = new mongoose.Schema({
@@ -114,4 +132,4 @@ const studentSchema = new mongoose.Schema({
 
 const StudentModel = mongoose.model('Student', studentSchema)
 
-export { StudentModel, UserModel, YearModel, ClassModel, dbClose }
+export { StudentModel, UserModel, YearModel, ClassModel, authorizeAdmin, authenticateToken, dbClose }
