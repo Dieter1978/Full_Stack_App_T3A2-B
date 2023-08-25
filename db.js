@@ -79,7 +79,7 @@ const ClassModel = mongoose.model('Class', classSchema)
 
 // YEAR SCHEMA
 const yearSchema = new mongoose.Schema({
-    year : {type : String, required: [true,'Please add name']},
+    year : {type : String, required: [true,'Please add name'], unique:true},
     class: [classSchema],
 
 })
