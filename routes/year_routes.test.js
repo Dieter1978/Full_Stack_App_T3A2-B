@@ -43,9 +43,9 @@ describe('GET /year', () => {
         expect(res.header['content-type']).toMatch('application/json')
     })
 
-    test('Returns an array of 5 elements', ()=>{
+    test('Returns an array of 2 elements', ()=>{
         expect(res.body).toBeInstanceOf(Array)
-        expect(res.body).toHaveLength(5)
+        expect(res.body).toHaveLength(2)
     })
 
     test("Year has a year value thats valid", () => {

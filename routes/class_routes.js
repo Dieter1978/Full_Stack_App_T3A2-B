@@ -5,10 +5,10 @@ const router = Router()
 
 
 // GET Classes
-router.get('/', async(req,res) => res.send(await ClassModel.find()))
+router.get('/',authorizeAdmin, authenticateToken,async(req,res) => res.send(await ClassModel.find()))
 
 
-router.get('/:year_id', async(req,res) => {
+router.get('/:year_id',authorizeAdmin, authenticateToken, async(req,res) => {
     try
     {
             // find by year
