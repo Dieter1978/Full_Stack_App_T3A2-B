@@ -4,7 +4,7 @@ import {YearModel,authorizeAdmin, authenticateToken} from '../db.js'
 const router = Router()
 
 // GET Years to display
-router.get('/', async(req,res) => res.send(await YearModel.find().populate({path : 'class', select: '-_id'})))
+router.get('/',authorizeAdmin, authenticateToken, async(req,res) => res.send(await YearModel.find().populate({path : 'class', select: '-_id'})))
 
 // Create a Year POST
 router.post('/', authorizeAdmin, authenticateToken, async(req,res) => {
@@ -30,7 +30,7 @@ router.post('/', authorizeAdmin, authenticateToken, async(req,res) => {
 })
 
 // Display a single Year
-router.get('/:id', async (req, res) => {
+router.get('/:id',authorizeAdmin, authenticateToken, async (req, res) => {
     try {
         const aYear = await YearModel.findById(req.params.id).populate({path: 'class',select : '-_id'})
 
