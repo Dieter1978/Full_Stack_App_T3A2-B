@@ -6,10 +6,10 @@ const router = Router()
 
 
 // GET Classes
-router.get('/',authorizeAdmin, authenticateToken,async(req,res) => res.send(await ClassModel.find()))
+router.get('/',authenticateToken, authorizeAdmin,async(req,res) => res.send(await ClassModel.find()))
 
 
-router.get('/:year_id',authorizeAdmin, authenticateToken, async(req,res) => {
+router.get('/:year_id',authenticateToken, authorizeAdmin,async(req,res) => {
     try
     {
             // find by year
@@ -33,7 +33,7 @@ router.get('/:year_id',authorizeAdmin, authenticateToken, async(req,res) => {
     
 
 // Create a Class POST
-router.post('/:year_id',authorizeAdmin, authenticateToken, async(req,res) => {
+router.post('/:year_id',authenticateToken, authorizeAdmin, async(req,res) => {
     try
     {
         // create the new class instance
@@ -73,7 +73,7 @@ router.post('/:year_id',authorizeAdmin, authenticateToken, async(req,res) => {
 
 
 // Update a Class PUT
-router.put('/:id',authorizeAdmin, authenticateToken, async (req, res)=>{
+router.put('/:id',authenticateToken, authorizeAdmin, async (req, res)=>{
     try {
         const updateClass = {}
 
@@ -99,7 +99,7 @@ router.put('/:id',authorizeAdmin, authenticateToken, async (req, res)=>{
 
 // Delete a Class DELETE
 
-router.delete('/:id',authorizeAdmin, authenticateToken, async (req,res) => {
+router.delete('/:id',authenticateToken, authorizeAdmin, async (req,res) => {
     try
     {
         const aClass = await ClassModel.findByIdAndDelete(req.params.id)

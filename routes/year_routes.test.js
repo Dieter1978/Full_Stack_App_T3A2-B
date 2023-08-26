@@ -34,7 +34,7 @@ describe('GET /year', () => {
     let res
 
     beforeEach(async () => {
-        res = await request(app).get('/year')
+        res = await request(app).get('/year').set('Authorization', "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTc2OGIwMjI0YzM3N2QzOTY5MWY4MSIsImlhdCI6MTY5MjkzMTYxOSwiZXhwIjoxNjk1NTIzNjE5fQ.PhDTOAmTBvG5rgbl1kHlJTnkcrsd2Hz0KCeY8GWCJaM")
        
     })
 
