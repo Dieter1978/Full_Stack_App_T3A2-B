@@ -61,7 +61,8 @@ router.post('/login', async (req, res) => {
 				const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
 					expiresIn: process.env.JWT_EXPIRE
 				})
-				res.status(200).json({ token, message: 'Login successful!' })
+				const returnedUser = await UserModel.findOne({ email })
+				res.status(200).json({ token, message: 'Login successful!', user: returnedUser })
 			} else {
 				res.status(400).send('Invalid credentials.')
 			}   

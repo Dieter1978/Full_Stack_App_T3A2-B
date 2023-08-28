@@ -16,8 +16,8 @@ app.use(express.json())
 app.get('/', (req, res) => res.send({info: 'Start Pagerequest'}))
 
 
-app.use('/year',yearRoutes)
-app.use('/class',classRoutes)
+app.use('/years',yearRoutes)
+app.use('/classes',classRoutes)
 app.use('/', authRoutes)
 app.use('/students', studentRoutes)
 

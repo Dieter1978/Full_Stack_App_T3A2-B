@@ -30,11 +30,11 @@ const validYears =['2009','2010','2011','2012','2015']
 
 })*/
 
-describe('GET /year', () => {
+describe('GET /years', () => {
     let res
 
     beforeEach(async () => {
-        res = await request(app).get('/year').set('Authorization', "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTc2OGIwMjI0YzM3N2QzOTY5MWY4MSIsImlhdCI6MTY5MjkzMTYxOSwiZXhwIjoxNjk1NTIzNjE5fQ.PhDTOAmTBvG5rgbl1kHlJTnkcrsd2Hz0KCeY8GWCJaM")
+        res = await request(app).get('/years').set('Authorization', "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTc2OGIwMjI0YzM3N2QzOTY5MWY4MSIsImlhdCI6MTY5MjkzMTYxOSwiZXhwIjoxNjk1NTIzNjE5fQ.PhDTOAmTBvG5rgbl1kHlJTnkcrsd2Hz0KCeY8GWCJaM")
        
     })
 
