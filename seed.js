@@ -2,33 +2,31 @@ import {StudentModel, UserModel, YearModel, ClassModel, dbClose} from './db.js'
 import bcrypt from 'bcryptjs'
 
 
-
-const classes = [
-    {name : 'Gecko'},
-    {name : 'Salamander'},
-    {name : 'Kangaroo'},
-    {name : 'Possum'}
-]
-
-await ClassModel.deleteMany()
-const insertedClasses = await ClassModel.insertMany(classes)
-console.log('inserted classes : ' + insertedClasses)
-
 const years =[ 
-    {year:'2009', class:[insertedClasses[0], insertedClasses[1]]},
-    {year:'2010', class:[insertedClasses[2], insertedClasses[3]]},
+  {name:'2009'},
+  {name:'2010'}
 ]
 
 await YearModel.deleteMany()
 const insertedYears = await YearModel.insertMany(years)
 console.log('inserted years : ' + insertedYears)
 
+const classes = [
+    {name : 'Gecko', year: insertedYears[0]},
+    {name : 'Salamander', year: insertedYears[0]},
+    {name : 'Kangaroo', year: insertedYears[1]},
+    {name : 'Possum', year: insertedYears[1]}
+]
+
+await ClassModel.deleteMany()
+const insertedClasses = await ClassModel.insertMany(classes)
+console.log('inserted classes : ' + insertedClasses)
+
 const students =[
     {
         firstname : 'John',
         lastname : 'Rogers',
-        year: insertedYears[0],
-        class:insertedYears[0].class[0],
+        class:insertedClasses[0],
         email: 'john.rogers@gmail.com',
         photo: 'http://images.google.com/',
         contactdetails : '+61453267890',
@@ -40,8 +38,7 @@ const students =[
     {
         firstname : 'Rex',
         lastname : 'Stevens',
-        year: insertedYears[1],
-        class:insertedYears[1].class[1],
+        class:insertedClasses[1],
         email: 'rex.stevens@gmail.com',
         photo: 'http://images.google.com/',
         contactdetails : '+61453267340',

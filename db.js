@@ -47,16 +47,14 @@ const UserModel = mongoose.model('User', userSchema)
 // CLASS SCHEMA
 const classSchema = new mongoose.Schema({
     name : {type : String, required: [true,'Please add name']},
-
+    year: {type: mongoose.ObjectId, ref: 'Year'}
 })
 
 const ClassModel = mongoose.model('Class', classSchema)
 
 // YEAR SCHEMA
 const yearSchema = new mongoose.Schema({
-    year : {type : String, required: [true,'Please add name'], unique:true},
-    class: [classSchema],
-
+    name : {type : String, required: [true,'Please add name'], unique:true}
 })
 
 const YearModel = mongoose.model('Year', yearSchema)
@@ -66,7 +64,7 @@ const YearModel = mongoose.model('Year', yearSchema)
 const studentSchema = new mongoose.Schema({
     firstname : {type: String, required:true},
     lastname: {type: String, required:true},
-    year: {type: mongoose.ObjectId, ref: 'Year'},
+    // year: {type: mongoose.ObjectId, ref: 'Year'},
     class: {type: mongoose.ObjectId, ref: 'Class'},
     email : {
         type: String,
