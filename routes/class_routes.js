@@ -77,17 +77,18 @@ router.put('/:id',authenticateToken, authorizeAdmin, async (req, res)=>{
     try {
         const updateClass = {}
 
-        if(req.body.content)
+        if(req.body)
         {
             const aClass = await ClassModel.findByIdAndUpdate(req.params.id, {name : req.body.name}, {new:true})
-        }
-        if(aClass)
-        {
-            res.send(aClass)
-        }
-        else 
-        {
-            res.status(404).send({error:'Not Found'})
+
+            if(aClass)
+            {
+                res.send(aClass)
+            }
+            else 
+            {
+                res.status(404).send({error:'Not Found'})
+            }
         }
     }
     catch(err){
