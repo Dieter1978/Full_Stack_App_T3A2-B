@@ -62,8 +62,8 @@ const YearModel = mongoose.model('Year', yearSchema)
 // STUDENT SCHEMA
 
 const studentSchema = new mongoose.Schema({
-    firstname : {type: String, required:true},
-    lastname: {type: String, required:true},
+    firstName : {type: String, required:true},
+    lastName: {type: String, required:true},
     // year: {type: mongoose.ObjectId, ref: 'Year'},
     class: {type: mongoose.ObjectId, ref: 'Class'},
     email : {
@@ -76,11 +76,11 @@ const studentSchema = new mongoose.Schema({
         ]
     },
     photo : String,
-    contactdetails: String,
-    questionone : String,
-    questiontwo : String,
-    questionthree : String,
-    questionfour : String,
+    contactDetails: String,
+    questionOne : String,
+    questionTwo : String,
+    questionThree : String,
+    questionFour : String,
 
 
 })

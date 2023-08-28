@@ -9,8 +9,8 @@ const router = Router()
 router.get('/', authorizeJWT, async (req, res) => {
   try {
     const students = await StudentModel.find()
-      .populate({ path: 'year', select: ' -_id year' })
-      .populate({ path: 'class', select: '-_id name' })
+      // .populate({ path: 'class', select: '-_id name' })
+      // .populate({ path: 'class', select: '_id name', populate: {path: 'year'} })
 
     res.send(students)
   } catch (error) {
@@ -41,7 +41,7 @@ router.get('/:id', authorizeJWT, async (req, res) => {
 // Admin access only
 router.post('/', authenticateToken, authorizeAdmin, async (req, res) => {
   try {
-    const { firstname, lastname, email, year, className, photo } = req.body
+    const { firstName, lastName, email, year, className, photo } = req.body
 
     // Check if year exists
     const selectedYear = await YearModel.findOne({ year })
@@ -56,8 +56,8 @@ router.post('/', authenticateToken, authorizeAdmin, async (req, res) => {
     }
 
     const newStudent = await StudentModel.create({
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       email,
       year: selectedYear._id,
       class: selectedClass._id,
@@ -79,17 +79,17 @@ router.post('/', authenticateToken, authorizeAdmin, async (req, res) => {
 router.put('/:id', authenticateToken, authorizeAdminOrLinkedStudent, async (req, res) => {
   try {
     const {
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       email,
       year,
       className,
       photo,
-      contactdetails,
-      questionone,
-      questiontwo,
-      questionthree,
-      questionfour
+      contactDetails,
+      questionOne,
+      questionTwo,
+      questionThree,
+      questionFour
     } = req.body
     
     // Check if year exists
@@ -106,17 +106,17 @@ router.put('/:id', authenticateToken, authorizeAdminOrLinkedStudent, async (req,
 
     const updatedStudent = await StudentModel.findByIdAndUpdate(
       req.params.id, {
-        firstname,
-        lastname,
+        firstName,
+        lastName,
         email,
         year: selectedYear._id,
         class: selectedClass._id,
         photo,
-        contactdetails,
-        questionone,
-        questiontwo,
-        questionthree,
-        questionfour
+        contactDetails,
+        questionOne,
+        questionTwo,
+        questionThree,
+        questionFour
       }, { new: true }
     )
 
