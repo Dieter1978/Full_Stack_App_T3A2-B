@@ -5,7 +5,7 @@ import { authenticateToken, authorizeAdmin, authorizeAdminOrLinkedStudent, autho
 const router = Router()
 
 // GET Years to display
-router.get('/',authenticateToken, authorizeAdmin, async(req,res) => res.send(await YearModel.find()))
+router.get('/',authenticateToken, async(req,res) => res.send(await YearModel.find()))
 
 // Create a Year POST
 router.post('/', authorizeAdmin, authenticateToken, async(req,res) => {

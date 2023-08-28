@@ -6,7 +6,7 @@ const router = Router()
 
 
 // GET Classes
-router.get('/',authenticateToken, authorizeAdmin,async(req,res) => res.send(await ClassModel.find().populate({path : 'year', select: '-_id -__v'})))
+router.get('/',authenticateToken,async(req,res) => res.send(await ClassModel.find().populate({path : 'year', select: '-_id -__v'})))
 
 
 router.get('/:year_id',authenticateToken, authorizeAdmin,async(req,res) => {
