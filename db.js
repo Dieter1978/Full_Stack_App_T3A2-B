@@ -50,6 +50,7 @@ const classSchema = new mongoose.Schema({
     year: {type: mongoose.ObjectId, ref: 'Year'}
 })
 
+classSchema.index({name: 1, year: 1}, {unique: true})
 const ClassModel = mongoose.model('Class', classSchema)
 
 // YEAR SCHEMA

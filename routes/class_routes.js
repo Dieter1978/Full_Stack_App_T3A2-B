@@ -61,9 +61,6 @@ router.post('/:year_id',authenticateToken, authorizeAdmin, async(req,res) => {
         {
             res.status(400).send({error : 'Error Adding Class'})
         }
-
-      
-
     }
     catch(err)
     {
@@ -72,6 +69,30 @@ router.post('/:year_id',authenticateToken, authorizeAdmin, async(req,res) => {
 })
 
 
+// Create a Class without year POST
+router.post('/',authenticateToken, authorizeAdmin, async(req,res) => {
+    try
+    {
+        // check if year exists
+        const existedYear = await YearModel.findOne({name: req.body.year})
+        
+        if(existedYear)
+        {
+            // create the new class instance
+            const newClass = await ClassModel.create({name : req.body.name, year: existedYear})
+            res.status(201).send(newClass)
+        }
+        else
+        {
+            res.status(400).send({error : 'Error Adding Class - year not found'})
+        }
+    }
+    catch(err)
+    {
+        res.status(500).send({error:err.message})
+    }
+})
+
 // Update a Class PUT
 router.put('/:id',authenticateToken, authorizeAdmin, async (req, res)=>{
     try {
@@ -79,7 +100,9 @@ router.put('/:id',authenticateToken, authorizeAdmin, async (req, res)=>{
 
         if(req.body)
         {
-            const aClass = await ClassModel.findByIdAndUpdate(req.params.id, {name : req.body.name}, {new:true})
+            //TODO: complete validation - year must exist
+            const foundYear = req.body.year && await YearModel.findOne({name: req.body.year.name})
+            const aClass = await ClassModel.findByIdAndUpdate(req.params.id, {name : req.body.name, year: foundYear}, {new:true}).populate('year')
 
             if(aClass)
             {

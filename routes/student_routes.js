@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { StudentModel, YearModel } from '../db.js'
+import { ClassModel, StudentModel, YearModel } from '../db.js'
 import { authenticateToken, authorizeAdmin, authorizeAdminOrLinkedStudent, authorizeJWT } from '../jwt_auth.js'
 
 const router = Router()
@@ -23,8 +23,8 @@ router.get('/', authorizeJWT, async (req, res) => {
 router.get('/:id', authorizeJWT, async (req, res) => {
   try {
     const student = await StudentModel.findById(req.params.id)
-      .populate({ path: 'year', select: ' -_id year' })
-      .populate({ path: 'class', select: '-_id name' })
+      // .populate({ path: 'year', select: ' -_id year' })
+      // .populate({ path: 'class', select: '-_id name' })
 
     if (!student) {
       return res.status(404).send('Student not found.')
@@ -41,31 +41,31 @@ router.get('/:id', authorizeJWT, async (req, res) => {
 // Admin access only
 router.post('/', authenticateToken, authorizeAdmin, async (req, res) => {
   try {
-    const { firstName, lastName, email, year, className, photo } = req.body
+    const { firstName, lastName, email, class: className, photo } = req.body
 
-    // Check if year exists
-    const selectedYear = await YearModel.findOne({ year })
-    if (!selectedYear) {
-      return res.status(404).json({ error: 'Year not found.' })
-    }
+    // // Check if year exists
+    // const selectedYear = await YearModel.findOne({ year })
+    // if (!selectedYear) {
+    //   return res.status(404).json({ error: 'Year not found.' })
+    // }
     
-    // Check if class is in selected year
-    const selectedClass = selectedYear.class.find(cls => cls.name === className)
+    // Check if class exists
+    const selectedClass = await ClassModel.findOne({name: className})
     if (!selectedClass) {
-      return res.status(404).json({ error: 'Class not found in the selected year.' })
+      return res.status(404).json({ error: 'Class not found' })
     }
 
     const newStudent = await StudentModel.create({
       firstName,
       lastName,
       email,
-      year: selectedYear._id,
+      // year: selectedYear._id,
       class: selectedClass._id,
       photo
     })
 
-    await newStudent.populate({ path: 'year', select: ' -_id year' })
-    await newStudent.populate({ path: 'class', select: '-_id name' })
+    // await newStudent.populate({ path: 'year', select: ' -_id year' })
+    // await newStudent.populate({ path: 'class', select: '-_id name' })
     
     res.status(201).send(newStudent)
 
@@ -82,8 +82,7 @@ router.put('/:id', authenticateToken, authorizeAdminOrLinkedStudent, async (req,
       firstName,
       lastName,
       email,
-      year,
-      className,
+      class: className,
       photo,
       contactDetails,
       questionOne,
@@ -92,16 +91,16 @@ router.put('/:id', authenticateToken, authorizeAdminOrLinkedStudent, async (req,
       questionFour
     } = req.body
     
-    // Check if year exists
-    const selectedYear = await YearModel.findOne({ year })
-    if (!selectedYear) {
-      return res.status(404).json({ error: 'Year not found.' })
-    }
+    // // Check if year exists
+    // const selectedYear = await YearModel.findOne({ year })
+    // if (!selectedYear) {
+    //   return res.status(404).json({ error: 'Year not found.' })
+    // }
 
-    // Check is class is in the selected year
-    const selectedClass = selectedYear.class.find(cls => cls.name === className)
+    // Check if class exists
+    const selectedClass = await ClassModel.findOne({name: className})
     if (!selectedClass) {
-      return res.status(404).json({ error: 'Class not found in the selected year.' })
+      return res.status(404).json({ error: 'Class not found' })
     }
 
     const updatedStudent = await StudentModel.findByIdAndUpdate(
@@ -109,7 +108,7 @@ router.put('/:id', authenticateToken, authorizeAdminOrLinkedStudent, async (req,
         firstName,
         lastName,
         email,
-        year: selectedYear._id,
+        // year: selectedYear._id,
         class: selectedClass._id,
         photo,
         contactDetails,
@@ -124,8 +123,8 @@ router.put('/:id', authenticateToken, authorizeAdminOrLinkedStudent, async (req,
       return res.status(404).json({ error: 'Student not found.' })
     }
 
-    await updatedStudent.populate({ path: 'year', select: ' -_id year' })
-    await updatedStudent.populate({ path: 'class', select: '-_id name' })
+    // await updatedStudent.populate({ path: 'year', select: ' -_id year' })
+    // await updatedStudent.populate({ path: 'class', select: '_id name' })
 
     res.status(200).json(updatedStudent)
   } catch (error) {

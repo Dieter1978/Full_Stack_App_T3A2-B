@@ -8,10 +8,10 @@ const router = Router()
 router.get('/',authenticateToken, async(req,res) => res.send(await YearModel.find()))
 
 // Create a Year POST
-router.post('/', authorizeAdmin, authenticateToken, async(req,res) => {
+router.post('/', authenticateToken, authorizeAdmin, async(req,res) => {
     try
     {
-        const newYear = await YearModel.create({year : req.body.year})
+        const newYear = await YearModel.create({name : req.body.name})
 
         if(newYear)
         {
