@@ -57,7 +57,7 @@ router.post('/login', async (req, res) => {
 
 		// Check the password if user is found
 		if (user) {
-			const isPasswordMatch = bcrypt.compare(password, user.password)
+			const isPasswordMatch = await bcrypt.compare(password, user.password)
 			// Return jwt token if password is correct
 			if (isPasswordMatch) {
 				const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
