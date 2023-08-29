@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { ClassModel, StudentModel, YearModel } from '../db.js'
+import { ClassModel, StudentModel, UserModel, YearModel } from '../db.js'
 import { authenticateToken, authorizeAdmin, authorizeAdminOrLinkedStudent, authorizeJWT } from '../jwt_auth.js'
 
 const router = Router()
@@ -88,7 +88,7 @@ router.put('/:id', authenticateToken, authorizeAdminOrLinkedStudent, async (req,
       firstName,
       lastName,
       email,
-      class: className,
+      class: classId,
       photo,
       contactDetails,
       questionOne,
@@ -105,7 +105,7 @@ router.put('/:id', authenticateToken, authorizeAdminOrLinkedStudent, async (req,
     // }
 
     // Check if class exists
-    const selectedClass = await ClassModel.findOne({name: className})
+    const selectedClass = await ClassModel.findById(classId)
     if (!selectedClass) {
       return res.status(404).json({ error: 'Class not found' })
     }
@@ -147,6 +147,7 @@ router.delete('/:id', authenticateToken, authorizeAdmin, async (req,res) => {
     const student = await StudentModel.findByIdAndDelete(req.params.id)
   
     if (student){
+      const user = await UserModel.findOneAndDelete({ email: student.email })
       res.sendStatus(200)
     } else {
       res.status(404).send({error: 'Student not Found'})
