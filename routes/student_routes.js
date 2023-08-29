@@ -61,7 +61,13 @@ router.post('/', authenticateToken, authorizeAdmin, async (req, res) => {
       email,
       // year: selectedYear._id,
       class: selectedClass._id,
-      photo
+      photo,
+      questionOne: '',
+      questionTwo: '',
+      questionThree: '',
+      questionFour: '',
+      contactDetails: '',
+      quote: ''
     })
 
     // await newStudent.populate({ path: 'year', select: ' -_id year' })
@@ -88,7 +94,8 @@ router.put('/:id', authenticateToken, authorizeAdminOrLinkedStudent, async (req,
       questionOne,
       questionTwo,
       questionThree,
-      questionFour
+      questionFour,
+      quote
     } = req.body
     
     // // Check if year exists
@@ -115,7 +122,8 @@ router.put('/:id', authenticateToken, authorizeAdminOrLinkedStudent, async (req,
         questionOne,
         questionTwo,
         questionThree,
-        questionFour
+        questionFour,
+        quote
       }, { new: true }
     )
 

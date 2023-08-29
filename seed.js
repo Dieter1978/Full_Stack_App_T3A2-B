@@ -34,6 +34,7 @@ const students =[
         questionTwo :'answer 2',
         questionThree :'answer 3',
         questionFour :'answer 4',
+        quote: 'lorem ipsum'
     },
     {
         firstName : 'Rex',
@@ -46,6 +47,7 @@ const students =[
         questionTwo :'answer 2',
         questionThree :'answer 3',
         questionFour :'answer 4',
+        quote: 'lorem ipsum'
     }
 
 

@@ -82,7 +82,7 @@ const studentSchema = new mongoose.Schema({
     questionTwo : String,
     questionThree : String,
     questionFour : String,
-
+    quote : String
 
 })
 

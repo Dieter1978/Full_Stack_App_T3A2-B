@@ -55,18 +55,18 @@ router.put('/:id',authenticateToken, authorizeAdmin, async (req,res) => {
     try {
         const updateYear =  await YearModel.findById(req.params.id)
 
-        if(req.body.year)
+        if(req.body.name)
         {
-            const aYear = await YearModel.findByIdAndUpdate(req.params.id, {year : req.body.year}, {new:true})
-        }
+            const aYear = await YearModel.findByIdAndUpdate(req.params.id, {name : req.body.name}, {new:true})
 
-        if(aYear)
-        {
-            res.send(aYear)
-        }
-        else 
-        {
-            res.status(404).send({error:'Not Found'})
+            if(aYear)
+            {
+                res.send(aYear)
+            }
+            else 
+            {
+                res.status(404).send({error:'Not Found'})
+            }
         }
     }
     catch(err){

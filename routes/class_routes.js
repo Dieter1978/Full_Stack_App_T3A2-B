@@ -100,17 +100,20 @@ router.put('/:id',authenticateToken, authorizeAdmin, async (req, res)=>{
 
         if(req.body)
         {
-            //TODO: complete validation - year must exist
             const foundYear = req.body.year && await YearModel.findOne({name: req.body.year.name})
-            const aClass = await ClassModel.findByIdAndUpdate(req.params.id, {name : req.body.name, year: foundYear}, {new:true}).populate('year')
-
-            if(aClass)
-            {
-                res.send(aClass)
+            if (foundYear) {
+                const aClass = await ClassModel.findByIdAndUpdate(req.params.id, {name : req.body.name, year: foundYear}, {new:true}).populate('year')
+                if(aClass)
+                {
+                    res.send(aClass)
+                }
+                else 
+                {
+                    res.status(404).send({error:'Not Found'})
+                }
             }
-            else 
-            {
-                res.status(404).send({error:'Not Found'})
+            else {
+                res.status(404).send({error:'Year Not Found'})
             }
         }
     }
