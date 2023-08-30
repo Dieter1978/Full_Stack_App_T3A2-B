@@ -2,53 +2,52 @@ import {StudentModel, UserModel, YearModel, ClassModel, dbClose} from './db.js'
 import bcrypt from 'bcryptjs'
 
 
-
-const classes = [
-    {name : 'Gecko'},
-    {name : 'Salamander'},
-    {name : 'Kangaroo'},
-    {name : 'Possum'}
-]
-
-await ClassModel.deleteMany()
-const insertedClasses = await ClassModel.insertMany(classes)
-console.log('inserted classes : ' + insertedClasses)
-
 const years =[ 
-    {year:'2009', class:[insertedClasses[0], insertedClasses[1]]},
-    {year:'2010', class:[insertedClasses[2], insertedClasses[3]]},
+  {name:'2009'},
+  {name:'2010'}
 ]
 
 await YearModel.deleteMany()
 const insertedYears = await YearModel.insertMany(years)
 console.log('inserted years : ' + insertedYears)
 
+const classes = [
+    {name : 'Gecko', year: insertedYears[0]},
+    {name : 'Salamander', year: insertedYears[0]},
+    {name : 'Kangaroo', year: insertedYears[1]},
+    {name : 'Possum', year: insertedYears[1]}
+]
+
+await ClassModel.deleteMany()
+const insertedClasses = await ClassModel.insertMany(classes)
+console.log('inserted classes : ' + insertedClasses)
+
 const students =[
     {
-        firstname : 'John',
-        lastname : 'Rogers',
-        year: insertedYears[0],
-        class:insertedYears[0].class[0],
+        firstName : 'John',
+        lastName : 'Rogers',
+        class:insertedClasses[0],
         email: 'john.rogers@gmail.com',
-        photo: 'http://images.google.com/',
-        contactdetails : '+61453267890',
-        questionone :'answer 1',
-        questiontwo :'answer 2',
-        questionthree :'answer 3',
-        questionfour :'answer 4',
+        photo: 'https://i.pravatar.cc/300?img=16',
+        contactDetails : '+61453267890',
+        questionOne :'answer 1',
+        questionTwo :'answer 2',
+        questionThree :'answer 3',
+        questionFour :'answer 4',
+        quote: 'lorem ipsum'
     },
     {
-        firstname : 'Rex',
-        lastname : 'Stevens',
-        year: insertedYears[1],
-        class:insertedYears[1].class[1],
+        firstName : 'Rex',
+        lastName : 'Stevens',
+        class:insertedClasses[1],
         email: 'rex.stevens@gmail.com',
-        photo: 'http://images.google.com/',
-        contactdetails : '+61453267340',
-        questionone :'answer 1',
-        questiontwo :'answer 2',
-        questionthree :'answer 3',
-        questionfour :'answer 4',
+        photo: 'https://i.pravatar.cc/300?img=25',
+        contactDetails : '+61453267340',
+        questionOne :'answer 1',
+        questionTwo :'answer 2',
+        questionThree :'answer 3',
+        questionFour :'answer 4',
+        quote: 'lorem ipsum'
     }
 
 

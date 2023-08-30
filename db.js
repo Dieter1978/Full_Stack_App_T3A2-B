@@ -47,16 +47,15 @@ const UserModel = mongoose.model('User', userSchema)
 // CLASS SCHEMA
 const classSchema = new mongoose.Schema({
     name : {type : String, required: [true,'Please add name']},
-
+    year: {type: mongoose.ObjectId, ref: 'Year'}
 })
 
+classSchema.index({name: 1, year: 1}, {unique: true})
 const ClassModel = mongoose.model('Class', classSchema)
 
 // YEAR SCHEMA
 const yearSchema = new mongoose.Schema({
-    year : {type : String, required: [true,'Please add name'], unique:true},
-    class: [classSchema],
-
+    name : {type : String, required: [true,'Please add name'], unique:true}
 })
 
 const YearModel = mongoose.model('Year', yearSchema)
@@ -64,9 +63,9 @@ const YearModel = mongoose.model('Year', yearSchema)
 // STUDENT SCHEMA
 
 const studentSchema = new mongoose.Schema({
-    firstname : {type: String, required:true},
-    lastname: {type: String, required:true},
-    year: {type: mongoose.ObjectId, ref: 'Year'},
+    firstName : {type: String, required:true},
+    lastName: {type: String, required:true},
+    // year: {type: mongoose.ObjectId, ref: 'Year'},
     class: {type: mongoose.ObjectId, ref: 'Class'},
     email : {
         type: String,
@@ -78,12 +77,12 @@ const studentSchema = new mongoose.Schema({
         ]
     },
     photo : String,
-    contactdetails: String,
-    questionone : String,
-    questiontwo : String,
-    questionthree : String,
-    questionfour : String,
-
+    contactDetails: String,
+    questionOne : String,
+    questionTwo : String,
+    questionThree : String,
+    questionFour : String,
+    quote : String
 
 })
 

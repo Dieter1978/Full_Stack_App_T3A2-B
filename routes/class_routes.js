@@ -6,7 +6,7 @@ const router = Router()
 
 
 // GET Classes
-router.get('/',authenticateToken, authorizeAdmin,async(req,res) => res.send(await ClassModel.find()))
+router.get('/',authenticateToken,async(req,res) => res.send(await ClassModel.find().populate({path : 'year', select: '-_id -__v'})))
 
 
 router.get('/:year_id',authenticateToken, authorizeAdmin,async(req,res) => {
@@ -61,9 +61,6 @@ router.post('/:year_id',authenticateToken, authorizeAdmin, async(req,res) => {
         {
             res.status(400).send({error : 'Error Adding Class'})
         }
-
-      
-
     }
     catch(err)
     {
@@ -72,22 +69,52 @@ router.post('/:year_id',authenticateToken, authorizeAdmin, async(req,res) => {
 })
 
 
+// Create a Class without year POST
+router.post('/',authenticateToken, authorizeAdmin, async(req,res) => {
+    try
+    {
+        // check if year exists
+        const existedYear = await YearModel.findOne({name: req.body.year})
+        
+        if(existedYear)
+        {
+            // create the new class instance
+            const newClass = await ClassModel.create({name : req.body.name, year: existedYear})
+            res.status(201).send(newClass)
+        }
+        else
+        {
+            res.status(400).send({error : 'Error Adding Class - year not found'})
+        }
+    }
+    catch(err)
+    {
+        res.status(500).send({error:err.message})
+    }
+})
+
 // Update a Class PUT
 router.put('/:id',authenticateToken, authorizeAdmin, async (req, res)=>{
     try {
         const updateClass = {}
 
-        if(req.body.content)
+        if(req.body)
         {
-            const aClass = await ClassModel.findByIdAndUpdate(req.params.id, {name : req.body.name}, {new:true})
-        }
-        if(aClass)
-        {
-            res.send(aClass)
-        }
-        else 
-        {
-            res.status(404).send({error:'Not Found'})
+            const foundYear = req.body.year && await YearModel.findOne({name: req.body.year.name})
+            if (foundYear) {
+                const aClass = await ClassModel.findByIdAndUpdate(req.params.id, {name : req.body.name, year: foundYear}, {new:true}).populate('year')
+                if(aClass)
+                {
+                    res.send(aClass)
+                }
+                else 
+                {
+                    res.status(404).send({error:'Not Found'})
+                }
+            }
+            else {
+                res.status(404).send({error:'Year Not Found'})
+            }
         }
     }
     catch(err){

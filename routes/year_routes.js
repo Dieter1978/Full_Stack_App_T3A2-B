@@ -5,13 +5,13 @@ import { authenticateToken, authorizeAdmin, authorizeAdminOrLinkedStudent, autho
 const router = Router()
 
 // GET Years to display
-router.get('/',authenticateToken, authorizeAdmin, async(req,res) => res.send(await YearModel.find().populate({path : 'class', select: '-_id'})))
+router.get('/',authenticateToken, async(req,res) => res.send(await YearModel.find()))
 
 // Create a Year POST
-router.post('/', authorizeAdmin, authenticateToken, async(req,res) => {
+router.post('/', authenticateToken, authorizeAdmin, async(req,res) => {
     try
     {
-        const newYear = await YearModel.create({year : req.body.year})
+        const newYear = await YearModel.create({name : req.body.name})
 
         if(newYear)
         {
@@ -55,18 +55,18 @@ router.put('/:id',authenticateToken, authorizeAdmin, async (req,res) => {
     try {
         const updateYear =  await YearModel.findById(req.params.id)
 
-        if(req.body.year)
+        if(req.body.name)
         {
-            const aYear = await YearModel.findByIdAndUpdate(req.params.id, {year : req.body.year}, {new:true})
-        }
+            const aYear = await YearModel.findByIdAndUpdate(req.params.id, {name : req.body.name}, {new:true})
 
-        if(aYear)
-        {
-            res.send(aYear)
-        }
-        else 
-        {
-            res.status(404).send({error:'Not Found'})
+            if(aYear)
+            {
+                res.send(aYear)
+            }
+            else 
+            {
+                res.status(404).send({error:'Not Found'})
+            }
         }
     }
     catch(err){
