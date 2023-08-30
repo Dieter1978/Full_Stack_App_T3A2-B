@@ -41,16 +41,10 @@ router.get('/:id', authorizeJWT, async (req, res) => {
 // Admin access only
 router.post('/', authenticateToken, authorizeAdmin, async (req, res) => {
   try {
-    const { firstName, lastName, email, class: className, photo } = req.body
+    const { firstName, lastName, email, class: classId, photo } = req.body
 
-    // // Check if year exists
-    // const selectedYear = await YearModel.findOne({ year })
-    // if (!selectedYear) {
-    //   return res.status(404).json({ error: 'Year not found.' })
-    // }
-    
     // Check if class exists
-    const selectedClass = await ClassModel.findOne({name: className})
+    const selectedClass = await ClassModel.findById(classId)
     if (!selectedClass) {
       return res.status(404).json({ error: 'Class not found' })
     }
@@ -59,7 +53,6 @@ router.post('/', authenticateToken, authorizeAdmin, async (req, res) => {
       firstName,
       lastName,
       email,
-      // year: selectedYear._id,
       class: selectedClass._id,
       photo,
       questionOne: '',
@@ -70,9 +63,6 @@ router.post('/', authenticateToken, authorizeAdmin, async (req, res) => {
       quote: ''
     })
 
-    // await newStudent.populate({ path: 'year', select: ' -_id year' })
-    // await newStudent.populate({ path: 'class', select: '-_id name' })
-    
     res.status(201).send(newStudent)
 
   } catch (error) {
