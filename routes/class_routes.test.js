@@ -1,12 +1,13 @@
 import app from '../app'
 import request from 'supertest'
+import token from './test_token.js'
 
 
 describe('GET /classes', ()=>{
     let res
 
     beforeEach(async () => {
-        res = await request(app).get('/classes').set('Authorization', "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTc2OGIwMjI0YzM3N2QzOTY5MWY4MSIsImlhdCI6MTY5MjkzMTYxOSwiZXhwIjoxNjk1NTIzNjE5fQ.PhDTOAmTBvG5rgbl1kHlJTnkcrsd2Hz0KCeY8GWCJaM")
+        res = await request(app).get('/classes').set('Authorization', `bearer ${token}`)
        
     }) 
 
@@ -19,16 +20,17 @@ describe('GET /classes', ()=>{
         res.body.forEach(el => {
         expect(el._id).toBeDefined()
         expect(el.name).toBeDefined()
+        //expect(el.year).toBeDefined()
         })
     })
 
 })
 
-describe('GET /classes/:year_id', ()=>{
+/*describe('GET /classes/:year_id', ()=>{
     let res
 
     beforeEach(async () => {
-        res = await request(app).get('/classes/64e768b0224c377d39691f78').set('Authorization', "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTc2OGIwMjI0YzM3N2QzOTY5MWY4MSIsImlhdCI6MTY5MjkzMTYxOSwiZXhwIjoxNjk1NTIzNjE5fQ.PhDTOAmTBvG5rgbl1kHlJTnkcrsd2Hz0KCeY8GWCJaM")
+        res = await request(app).get('/classes/64eed1a162e1fd8293fd2c86').set('Authorization', "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWVkMWEyNjJlMWZkODI5M2ZkMmM5NiIsImlhdCI6MTY5MzM5MjM2OSwiZXhwIjoxNjk1OTg0MzY5fQ.m1URVEWklTi5zs950GmIwxnwMY1i5rZvqfDhuycslA0")
        
     }) 
 
@@ -44,4 +46,30 @@ describe('GET /classes/:year_id', ()=>{
         })
     })
 
-})
+})*/
+
+
+// Values are unique so you can only test them once and then you have to change the values manually.
+/*describe('/POST create a new class', () => {
+    let res
+
+    beforeAll(async () => {
+        res = await request(app).post('/classes').set('Authorization', `bearer ${token}`).send({name: 'Falcon', year:'2020'})
+        
+    })
+
+    test('Returns a JSON body with _id', ()=>{
+        expect(res.status).toBe(201)
+        expect(res.header['content-type']).toMatch('application/json')
+        expect(res.body._id).toBeDefined()
+
+    })
+
+    test('Year has _id and correct year', () => {
+        expect(res.body._id).toBeDefined()
+        expect(res.body.name).toBeDefined()
+        expect(res.body.name).toBe('Falcon')
+    })
+
+
+})*/

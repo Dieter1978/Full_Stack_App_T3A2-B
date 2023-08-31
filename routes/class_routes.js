@@ -9,7 +9,9 @@ const router = Router()
 router.get('/',authenticateToken,async(req,res) => res.send(await ClassModel.find().populate({path : 'year', select: '-_id -__v'})))
 
 
-router.get('/:year_id',authenticateToken, authorizeAdmin,async(req,res) => {
+
+//Route does not work on re-factor its not needed
+/*router.get('/:year_id',authenticateToken, authorizeAdmin,async(req,res) => {
     try
     {
             // find by year
@@ -29,7 +31,7 @@ router.get('/:year_id',authenticateToken, authorizeAdmin,async(req,res) => {
     }
 
 
-})
+})*/
     
 
 // Create a Class POST
