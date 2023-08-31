@@ -1,7 +1,8 @@
 import app from '../app'
 import request from 'supertest'
+import token from './test_token.js'
 
-const validYears =['2009','2010','2011','2012','2015']
+const validYears =['2009','2010','2011','2012','2015','2020']
 
 
 //POST METHOD works on a year which is unique so it will fail on a second attempt.
@@ -34,7 +35,7 @@ describe('GET /years', () => {
     let res
 
     beforeEach(async () => {
-        res = await request(app).get('/years').set('Authorization', "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTc2OGIwMjI0YzM3N2QzOTY5MWY4MSIsImlhdCI6MTY5MjkzMTYxOSwiZXhwIjoxNjk1NTIzNjE5fQ.PhDTOAmTBvG5rgbl1kHlJTnkcrsd2Hz0KCeY8GWCJaM")
+        res = await request(app).get('/years').set('Authorization', `Bearer ${token}`)
        
     })
 
@@ -43,15 +44,15 @@ describe('GET /years', () => {
         expect(res.header['content-type']).toMatch('application/json')
     })
 
-    test('Returns an array of 2 elements', ()=>{
+    test('Returns an array of 3 elements', ()=>{
         expect(res.body).toBeInstanceOf(Array)
-        expect(res.body).toHaveLength(2)
+        expect(res.body).toHaveLength(3)
     })
 
     test("Year has a year value thats valid", () => {
         res.body.forEach(el => {
-        expect(el.year).toBeDefined()
-        expect(validYears).toContain(el.year)
+        expect(el.name).toBeDefined()
+        expect(validYears).toContain(el.name)
         })
     })
 
