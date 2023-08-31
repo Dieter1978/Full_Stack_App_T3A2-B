@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">35.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/42</span>
+                <span class='fraction'>15/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">31.25% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>5/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/5</span>
+                <span class='fraction'>2/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.63% </span>
+                <span class="strong">34.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/41</span>
+                <span class='fraction'>14/41</span>
             </div>
         
             
@@ -312,17 +312,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -461,25 +461,25 @@ router.post('/',authenticateToken, authorizeAdmin, <span class="fstat-no" title=
 })
 &nbsp;
 // Update a Class PUT
-router.put('/:id',authenticateToken, authorizeAdmin, <span class="fstat-no" title="function not covered" >as</span>ync (req, res)=&gt;{
-<span class="cstat-no" title="statement not covered" >    try {</span>
-        const updateClass = <span class="cstat-no" title="statement not covered" >{}</span>
+router.put('/:id',authenticateToken, authorizeAdmin, async (req, res)=&gt;{
+    try {
+        const updateClass = {}
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if(req.body)</span>
+        <span class="missing-if-branch" title="else path not taken" >E</span>if(req.body)
         {
-            const foundYear = <span class="cstat-no" title="statement not covered" >req.body.year &amp;&amp; await YearModel.findOne({name: req.body.year.name})</span>
-<span class="cstat-no" title="statement not covered" >            if (foundYear) {</span>
-                const aClass = <span class="cstat-no" title="statement not covered" >await ClassModel.findByIdAndUpdate(req.params.id, {name : req.body.name, year: foundYear}, {new:true}).populate('year')</span>
-<span class="cstat-no" title="statement not covered" >                if(aClass)</span>
+            const foundYear = req.body.year &amp;&amp; await YearModel.findOne({name: req.body.year.name})
+            if (foundYear) {
+                const aClass = await ClassModel.findByIdAndUpdate(req.params.id, {name : req.body.name, year: foundYear}, {new:true}).populate('year')
+                if(aClass)
                 {
-<span class="cstat-no" title="statement not covered" >                    res.send(aClass)</span>
+                    res.send(aClass)
                 }
                 else 
-                {
+                <span class="missing-if-branch" title="else path not taken" >E</span>{
 <span class="cstat-no" title="statement not covered" >                    res.status(404).send({error:'Not Found'})</span>
                 }
             }
-            else {
+            else <span class="missing-if-branch" title="else path not taken" >E</span>{
 <span class="cstat-no" title="statement not covered" >                res.status(404).send({error:'Year Not Found'})</span>
             }
         }
@@ -520,7 +520,7 @@ export default router</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-31T03:54:29.392Z
+                at 2023-08-31T08:05:34.010Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

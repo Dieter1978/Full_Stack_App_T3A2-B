@@ -73,3 +73,26 @@ describe('GET /classes', ()=>{
 
 
 })*/
+
+describe('/PUT update a  class', () => {
+    let res
+
+    beforeAll(async () => {
+        res = await request(app).put('/classes/64f00d54510896981eb72e89').set('Authorization', `bearer ${token}`).send({name: 'Tiger', year : {_id : '64eed38f7efa4d406c7ee7ba', name : '2020' }})
+        
+    })
+
+    test('Returns a JSON body with _id', ()=>{
+        expect(res.status).toBe(200)
+        expect(res.header['content-type']).toMatch('application/json')
+        expect(res.body._id).toBeDefined()
+
+    })
+
+    test('Class has correct name', () => {
+        //expect(res.body._id).toBeDefined()
+        expect(res.body.name).toBeDefined()
+        expect(res.body.name).toBe('Tiger')
+    })
+
+})
