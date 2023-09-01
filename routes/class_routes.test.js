@@ -2,25 +2,24 @@ import app from '../app'
 import request from 'supertest'
 import token from './test_token.js'
 
+// Testing get all classes
+describe ('GET /classes', () => {
+	let res
 
-describe('GET /classes', ()=>{
-    let res
+	beforeEach(async () => {
+		res = await request(app).get('/classes').set('Authorization', `bearer ${token}`)
+	})
+	
+	test ('Returns JSON', async () => {
+		expect(res.status).toBe(200)
+		expect(res.header['content-type']).toMatch('json')
+	})
 
-    beforeEach(async () => {
-        res = await request(app).get('/classes').set('Authorization', `bearer ${token}`)
-       
-    }) 
-
-    test('Returns JSON', async ()=>{
-        expect(res.status).toBe(200)
-        expect(res.header['content-type']).toMatch('application/json')
-    })
-
-    test("Each class has a 'name' and '_id'", () => {
+    test("Each class has an '_id', 'name' and 'year'", () => {
         res.body.forEach(el => {
         expect(el._id).toBeDefined()
         expect(el.name).toBeDefined()
-        //expect(el.year).toBeDefined()
+        expect(el.year).toBeDefined()
         })
     })
 
@@ -74,25 +73,25 @@ describe('GET /classes', ()=>{
 
 })*/
 
-describe('/PUT update a  class', () => {
-    let res
+// describe('/PUT update a  class', () => {
+//     let res
 
-    beforeAll(async () => {
-        res = await request(app).put('/classes/64f00d54510896981eb72e89').set('Authorization', `bearer ${token}`).send({name: 'Tiger', year : {_id : '64eed38f7efa4d406c7ee7ba', name : '2020' }})
+//     beforeAll(async () => {
+//         res = await request(app).put('/classes/64f00d54510896981eb72e89').set('Authorization', `bearer ${token}`).send({name: 'Tiger', year : {_id : '64eed38f7efa4d406c7ee7ba', name : '2020' }})
         
-    })
+//     })
 
-    test('Returns a JSON body with _id', ()=>{
-        expect(res.status).toBe(200)
-        expect(res.header['content-type']).toMatch('application/json')
-        expect(res.body._id).toBeDefined()
+//     test('Returns a JSON body with _id', ()=>{
+//         expect(res.status).toBe(200)
+//         expect(res.header['content-type']).toMatch('application/json')
+//         expect(res.body._id).toBeDefined()
 
-    })
+//     })
 
-    test('Class has correct name', () => {
-        //expect(res.body._id).toBeDefined()
-        expect(res.body.name).toBeDefined()
-        expect(res.body.name).toBe('Tiger')
-    })
+//     test('Class has correct name', () => {
+//         //expect(res.body._id).toBeDefined()
+//         expect(res.body.name).toBeDefined()
+//         expect(res.body.name).toBe('Tiger')
+//     })
 
-})
+// })

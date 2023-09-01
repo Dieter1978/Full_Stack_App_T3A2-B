@@ -33,14 +33,14 @@ describe ('GET /students', () => {
   })
 })
 
-// Testing get one student
+//  // Testing get one student
 // describe ('GET /students/:id', () => {
 // 	let res
-// 	// let studentId
+// 	let studentId
 
 // 	beforeEach(async () => {
 
-		// Create a student for testing
+	//  // Create a student for testing
 	// 	const newStudent = new StudentModel({
 	// 		firstName: 'Sarah',
 	// 		lastName: 'Malcolm',
