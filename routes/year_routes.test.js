@@ -17,7 +17,7 @@ describe('GET /years', () => {
 		expect(res.header['content-type']).toMatch('json')
 	})
 
-    test('Each student has an "_id" of 24 characters', () => {
+    test('Each year has an "_id" of 24 characters', () => {
         res.body.forEach(el => {
             expect(el._id).toBeDefined()
             expect(el._id).toHaveLength(24)
