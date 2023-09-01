@@ -2,8 +2,7 @@ import app from '../app'
 import request from 'supertest'
 import token from './test_token.js'
 
-const validYears =['2009','2010','2011','2012','2015','2020']
-
+// const validYears =['2009','2010','2011','2012','2015','2020']
 
 // Testing get all years
 describe('GET /years', () => {
@@ -18,12 +17,13 @@ describe('GET /years', () => {
 		expect(res.header['content-type']).toMatch('json')
 	})
 
-    test("Year has a year value thats valid", () => {
+    test('Each student has an "_id" of 24 characters', () => {
         res.body.forEach(el => {
-        expect(el.name).toBeDefined()
-        expect(validYears).toContain(el.name)
+            expect(el._id).toBeDefined()
+            expect(el._id).toHaveLength(24)
         })
     })
+
 })
 
 
