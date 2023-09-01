@@ -1,12 +1,12 @@
 import { Router } from 'express'
 import { ClassModel, StudentModel, UserModel, YearModel } from '../db.js'
-import { authenticateToken, authorizeAdmin, authorizeAdminOrLinkedStudent, authorizeJWT } from '../jwt_auth.js'
+import { authenticateToken, authorizeAdmin, authorizeAdminOrLinkedStudent } from '../jwt_auth.js'
 
 const router = Router()
 
 // Get all students
 // Accessible by any valid user
-router.get('/', authorizeJWT, async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
     const students = await StudentModel.find()
       // .populate({ path: 'class', select: '-_id name' })
@@ -20,7 +20,7 @@ router.get('/', authorizeJWT, async (req, res) => {
 
 // Get one student
 // Accessible by any valid user
-router.get('/:id', authorizeJWT, async (req, res) => {
+router.get('/:id', authenticateToken, async (req, res) => {
   try {
     const student = await StudentModel.findById(req.params.id)
       // .populate({ path: 'year', select: ' -_id year' })

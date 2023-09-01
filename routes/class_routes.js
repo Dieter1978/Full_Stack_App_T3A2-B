@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import {ClassModel, YearModel} from '../db.js'
-import { authenticateToken, authorizeAdmin, authorizeAdminOrLinkedStudent, authorizeJWT } from '../jwt_auth.js'
+import { authenticateToken, authorizeAdmin } from '../jwt_auth.js'
 
 const router = Router()
 

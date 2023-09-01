@@ -29,7 +29,7 @@ router.post('/signup', async (req, res) => {
 
 		const newUser = await UserModel.create({ name, email, role, password, student: student._id })
 
-		// return user without password
+		// Return user without password
     const returnedUser = await UserModel.findById(newUser._id)
 		// Generate a JWT token for the new user
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
@@ -57,12 +57,12 @@ router.post('/login', async (req, res) => {
 
 		// Check the password if user is found
 		if (user) {
-			const isPasswordMatch = await bcrypt.compare(password, user.password)
+			const isPasswordMatch = bcrypt.compare(password, user.password)
 			// Return jwt token if password is correct
 			if (isPasswordMatch) {
 				const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
 					expiresIn: process.env.JWT_EXPIRE
-				})
+				})	
 				const returnedUser = await UserModel.findOne({ email })
 				res.status(200).json({ token, message: 'Login successful!', user: returnedUser })
 			} else {
